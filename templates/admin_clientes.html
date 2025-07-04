@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin - Clientes</title>
+</head>
+<body>
+  <h1>Clientes registrados</h1>
+
+  {% for client_id, info in clients.items() %}
+    <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+      <h2>{{ client_id }}</h2>
+      <p><strong>Client Secret:</strong> {{ info.client_secret }}</p>
+      <p><strong>Redirect URIs:</strong></p>
+      <ul>
+        {% for uri in info.redirect_uris %}
+          <li>{{ uri }}</li>
+        {% endfor %}
+      </ul>
+
+      <form method="post" action="/admin/clientes/adicionar_redirect">
+        <input type="hidden" name="client_id" value="{{ client_id }}">
+        <input type="text" name="redirect_uri" placeholder="Nova Redirect URI" required>
+        <button type="submit">Adicionar Redirect URI</button>
+      </form>
+    </div>
+  {% endfor %}
+</body>
+</html>
