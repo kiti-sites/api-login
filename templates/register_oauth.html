@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Registrar</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Crie sua conta</h1>
+    <form method="post" action="/register">
+      <input type="hidden" name="client_id" value="{{ client_id }}">
+      <input type="hidden" name="redirect_uri" value="{{ redirect_uri }}">
+      <input type="hidden" name="state" value="{{ state }}">
+      <input type="text" name="username" placeholder="usuário novo" required><br>
+      <input type="password" name="password" placeholder="senha" required><br>
+      <button type="submit">Registrar e continuar</button>
+    </form>
+    {% if error %}
+      <p class="error">{{ error }}</p>
+    {% endif %}
+    <p>já tem conta? <a href="/authorize?client_id={{ client_id }}&redirect_uri={{ redirect_uri }}&state={{ state }}">fazer login</a></p>
+  </div>
+</body>
+</html>
