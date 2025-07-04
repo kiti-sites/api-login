@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Callback - Site Parceiro</title>
+</head>
+<body>
+  <h1>Finalizando login...</h1>
+  <div id="status">Aguardando token...</div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get("code");
+    const state = urlParams.get("state");
+
+    if (!code) {
+      document.getElementById("status").innerText = "Erro: código não encontrado.";
+    } else {
+      // troca code por token
+      fetch("http://localhost:8000/token", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: new URLSearchParams({
+          client_id: "site123",
+          client_secret: "segredodo123",
+          code: code
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.access_token) {
+          document.getElementById("status").innerText = "Token recebido! Buscando dados do usuário...";
+          console.log("Token recebido:", data.access_token);
+
+          // pega info do user com tratamento de erro
+          fetch(`http://localhost:8000/userinfo?token=${data.access_token}`)
+            .then(res => {
+              if (!res.ok) {
+                throw new Error(`Erro HTTP ${res.status} ao buscar userinfo`);
+              }
+              return res.json();
+            })
+            .then(user => {
+              document.getElementById("status").innerText = `Olá, ${user.username}! Você foi autenticado com sucesso 🎉`;
+            })
+            .catch(err => {
+              document.getElementById("status").innerText = `Erro ao obter dados do usuário: ${err.message}`;
+              console.error(err);
+            });
+
+        } else {
+          document.getElementById("status").innerText = "Erro ao obter token.";
+          console.error(data);
+        }
+      })
+      .catch(err => {
+        document.getElementById("status").innerText = "Erro ao conectar com servidor.";
+        console.error(err);
+      });
+    }
+  </script>
+</body>
+</html>
