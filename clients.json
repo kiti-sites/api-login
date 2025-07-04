@@ -1,0 +1,11 @@
+{
+  "site123": {
+    "client_secret": "segredodo123",
+    "redirect_uris": [
+      "http://localhost:8001/callback",
+      "http://localhost:8000/static/callback.html",
+      "http://localhost:5500/callback.html",
+      "https://kiti.dev/exemplo site parceiro/callback.html"
+    ]
+  }
+}
